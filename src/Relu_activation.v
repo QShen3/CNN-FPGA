@@ -28,13 +28,13 @@ module Relu_activation#(
     parameter integer DATACHANNEL = 3
     )
     (
-    input clk,
-    input clken,
+    //input clk,
+    //input clken,
     input [BITWIDTH * DATAHEIGHT * DATAWIDTH * DATACHANNEL - 1:0] data,
     output reg [BITWIDTH * DATAHEIGHT * DATAWIDTH * DATACHANNEL - 1:0] result
     );
     
-    wire [BITWIDTH * DATAHEIGHT * DATAWIDTH * DATACHANNEL - 1:0] out;
+    //wire [BITWIDTH * DATAHEIGHT * DATAWIDTH * DATACHANNEL - 1:0] out;
     
     genvar i, j, k;
     generate
@@ -47,10 +47,10 @@ module Relu_activation#(
         end
     endgenerate
 
-    always @(posedge clk) begin
-        if(clken == 1) begin
-            result = out;
-        end
-    end    
+    // always @(posedge clk) begin
+    //     if(clken == 1) begin
+    //         result = out;
+    //     end
+    // end    
     
 endmodule

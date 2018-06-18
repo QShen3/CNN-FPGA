@@ -37,12 +37,12 @@ module Conv2d #(
     parameter integer PADDINGENABLE = 0
     )
     (
-    input clk,
-    input clken,
+    //input clk,
+    //input clken,
     input [BITWIDTH * DATAWIDTH * DATAHEIGHT * DATACHANNEL - 1 : 0]data,
     input [BITWIDTH * FILTERHEIGHT * FILTERWIDTH * DATACHANNEL * FILTERBATCH - 1 : 0]filterWeight,
     input [BITWIDTH * FILTERBATCH - 1 : 0] filterBias,
-    output reg [(BITWIDTH * 2) * FILTERBATCH * (PADDINGENABLE == 0 ? (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH : (DATAWIDTH / STRIDEWIDTH)) * (PADDINGENABLE == 0 ? (DATAHEIGHT - FILTERHEIGHT + 1) / STRIDEHEIGHT : (DATAHEIGHT / STRIDEHEIGHT)) - 1 : 0] result
+    output [(BITWIDTH * 2) * FILTERBATCH * (PADDINGENABLE == 0 ? (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH : (DATAWIDTH / STRIDEWIDTH)) * (PADDINGENABLE == 0 ? (DATAHEIGHT - FILTERHEIGHT + 1) / STRIDEHEIGHT : (DATAHEIGHT / STRIDEHEIGHT)) - 1 : 0] result
     );
     
     wire [BITWIDTH - 1 : 0] dataArray[0 : DATACHANNEL - 1][0 : DATAHEIGHT-1][0 : DATAWIDTH - 1];
@@ -114,16 +114,16 @@ module Conv2d #(
                         ConvKernel#(BITWIDTH, DATACHANNEL, FILTERHEIGHT, FILTERWIDTH) convKernel(paramArray[m][n], 
                         filterWeightArray[i], 
                         filterBias[(i + 1) * BITWIDTH - 1 :i * BITWIDTH],
-                        out[(i * (PADDINGENABLE == 1 ? DATAHEIGHT / STRIDEHEIGHT: (DATAHEIGHT - FILTERHEIGHT + 1) / STRIDEHEIGHT) * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + m * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + n) * 2 * BITWIDTH + 2 * BITWIDTH - 1:(i * (PADDINGENABLE == 1 ? DATAHEIGHT / STRIDEHEIGHT: (DATAHEIGHT - FILTERHEIGHT + 1) / STRIDEHEIGHT) * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + m * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + n * 2 * BITWIDTH)]);
+                        result[(i * (PADDINGENABLE == 1 ? DATAHEIGHT / STRIDEHEIGHT: (DATAHEIGHT - FILTERHEIGHT + 1) / STRIDEHEIGHT) * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + m * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + n) * 2 * BITWIDTH + 2 * BITWIDTH - 1:(i * (PADDINGENABLE == 1 ? DATAHEIGHT / STRIDEHEIGHT: (DATAHEIGHT - FILTERHEIGHT + 1) / STRIDEHEIGHT) * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + m * (PADDINGENABLE == 1 ? DATAWIDTH / STRIDEWIDTH : (DATAWIDTH - FILTERWIDTH + 1) / STRIDEWIDTH) * BITWIDTH * 2 + n * 2 * BITWIDTH)]);
                 end
             end            
         end
     endgenerate
     
-    always @(posedge clk) begin
-        if(clken == 1) begin
-            result = out;
-        end
-    end
+    // always @(posedge clk) begin
+    //     if(clken == 1) begin
+    //         result = out;
+    //     end
+    // end
     
 endmodule

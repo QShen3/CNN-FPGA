@@ -31,8 +31,8 @@ module Max_pool#(
     parameter integer KHEIGHT = 2
     )
     (
-    input clk,
-    input clken,
+    //input clk,
+    //input clken,
     input [BITWIDTH * DATAWIDTH * DATAHEIGHT * DATACHANNEL - 1 : 0]data,
     output reg [BITWIDTH * DATAWIDTH / KWIDTH * DATAHEIGHT / KHEIGHT * DATACHANNEL - 1 : 0] result
     );
@@ -40,7 +40,7 @@ module Max_pool#(
     wire [BITWIDTH - 1 : 0] dataArray[0 : DATACHANNEL - 1][0 : DATAHEIGHT-1][0 : DATAWIDTH - 1];
     wire [BITWIDTH * KHEIGHT * KWIDTH - 1 : 0]paramArray [0: DATACHANNEL - 1][0: DATAHEIGHT / KHEIGHT - 1][0: DATAWIDTH / KWIDTH - 1];
     
-    wire [BITWIDTH * DATAWIDTH / KWIDTH * DATAHEIGHT / KHEIGHT * DATACHANNEL - 1 : 0] out;
+    //wire [BITWIDTH * DATAWIDTH / KWIDTH * DATAHEIGHT / KHEIGHT * DATACHANNEL - 1 : 0] out;
     
     genvar i, j, k, m, n;
     generate       
@@ -71,16 +71,16 @@ module Max_pool#(
         for(i = 0; i < DATACHANNEL; i = i + 1) begin
             for(j = 0; j < DATAHEIGHT / KHEIGHT; j = j + 1) begin
                 for(k = 0; k < DATAWIDTH / KWIDTH; k = k + 1) begin
-                    Max#(BITWIDTH, KHEIGHT * KWIDTH) max(paramArray[i][j][k], out[(i * DATAHEIGHT / KHEIGHT * DATAWIDTH / KWIDTH + j * DATAWIDTH / KWIDTH + k) * BITWIDTH + BITWIDTH - 1:(i * DATAHEIGHT / KHEIGHT * DATAWIDTH / KWIDTH + j * DATAWIDTH / KWIDTH + k) * BITWIDTH]);
+                    Max#(BITWIDTH, KHEIGHT * KWIDTH) max(paramArray[i][j][k], result[(i * DATAHEIGHT / KHEIGHT * DATAWIDTH / KWIDTH + j * DATAWIDTH / KWIDTH + k) * BITWIDTH + BITWIDTH - 1:(i * DATAHEIGHT / KHEIGHT * DATAWIDTH / KWIDTH + j * DATAWIDTH / KWIDTH + k) * BITWIDTH]);
                 end
             end
         end
     endgenerate
     
-    always @(posedge clk) begin
-        if(clken == 1) begin
-            result = out;
-        end
-    end
+    // always @(posedge clk) begin
+    //     if(clken == 1) begin
+    //         result = out;
+    //     end
+    // end
     
 endmodule

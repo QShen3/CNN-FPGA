@@ -28,12 +28,12 @@ module FullConnect#(
     parameter FILTERBATCH = 1
     )
     (
-    input clk,
-    input clken,
+    //input clk,
+    //input clken,
     input [BITWIDTH * LENGTH - 1 : 0] data,
     input [BITWIDTH * LENGTH * FILTERBATCH - 1 : 0] weight,
     input [BITWIDTH * FILTERBATCH - 1 : 0] bias,
-    output reg [BITWIDTH * 2 * FILTERBATCH - 1 : 0] result
+    output [BITWIDTH * 2 * FILTERBATCH - 1 : 0] result
     );
     
     //reg [BITWIDTH * 2 * LENGTH * FILTERBATCH- 1:0] out;
@@ -41,13 +41,13 @@ module FullConnect#(
     wire signed [BITWIDTH - 1:0] biasArray[0:FILTERBATCH - 1];
     reg signed [BITWIDTH * 2 - 1:0] resultArray [0:FILTERBATCH - 1];
     
-    wire [BITWIDTH * 2 * FILTERBATCH - 1 : 0] out2;
+    //wire [BITWIDTH * 2 * FILTERBATCH - 1 : 0] out2;
     
     genvar i, j;
     generate
         for(i = 0; i < FILTERBATCH; i = i + 1) begin
             assign biasArray[i] = bias[(i + 1) * BITWIDTH - 1: i * BITWIDTH];
-            assign out2[(i + 1) * BITWIDTH * 2 - 1: i * BITWIDTH * 2] = resultArray[i];
+            assign result[(i + 1) * BITWIDTH * 2 - 1: i * BITWIDTH * 2] = resultArray[i];
         end
     endgenerate
     
@@ -71,10 +71,10 @@ module FullConnect#(
         end
     end
     
-    always @(posedge clk) begin
-        if(clken == 1) begin
-            result = out2;
-        end
-    end 
+    // always @(posedge clk) begin
+    //     if(clken == 1) begin
+    //         result = out2;
+    //     end
+    // end 
     
 endmodule
